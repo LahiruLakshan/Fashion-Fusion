@@ -1,5 +1,61 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700&display=swap');
 
+.container {
+  max-width: 600px;
+  margin: auto;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.chat-box, .recommendation-form {
+  margin: 20px 0;
+  padding: 15px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.chat-history {
+  height: 250px;
+  overflow-y: scroll;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+input {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.user-message {
+  text-align: right;
+  color: blue;
+}
+
+.chatbot-message {
+  text-align: left;
+  color: green;
+}
+
+
 * {
   box-sizing: border-box;
   padding: 0;

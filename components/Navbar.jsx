@@ -18,10 +18,11 @@ const Navbar = ({Searchproducts}) => {
         <Image src={logo} width={140} alt='logo' />
       </Link>
       <ul className='nav-links'>
-        <Link href='/female'><li>Female</li></Link>
+        {/* <Link href='/female'><li>Female</li></Link> */}
         <Link href='/male'><li>Male</li></Link>
         {/* <Link href='/kids'><li>Kids</li></Link> */}
         <Link href='/products'><li>All Products</li></Link>
+        <Link href='/chatbot'><li>Chatbot</li></Link>
       </ul>
 
         <div className='search-bar'>
