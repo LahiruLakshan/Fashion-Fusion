@@ -98,6 +98,9 @@ const ProductDetails = ({products, product}) => {
                         <h3>{name}</h3>
                         <span>{tags}</span>   
                     </div>
+                    <div className='btn-box'>
+                        <button className='btn' type='button' onClick={() => console.log("Recommend Size...")}>Try On</button>
+                        </div>
                     <div className='size'>
                         <p>SELECT SIZE</p>
                         <ul>
