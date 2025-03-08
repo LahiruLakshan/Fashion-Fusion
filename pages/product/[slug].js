@@ -3,11 +3,72 @@ import { client, urlFor } from '../../lib/client'
 import { AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai'
 import {CgShoppingCart} from 'react-icons/cg'
 import { useStateContext } from '../../context/StateContext';
+import { 
+    Modal,
+    Button,
+    TextField,
+    Backdrop,
+    Fade,
+    makeStyles,
+    Paper,
+    Typography,
+    IconButton
+  } from '@material-ui/core';
+  import { Close } from '@material-ui/icons';
+
+  // Add these styles
+const useStyles = makeStyles((theme) => ({
+    modal: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    paper: {
+      backgroundColor: theme.palette.background.paper,
+      boxShadow: theme.shadows[5],
+      padding: theme.spacing(4),
+      borderRadius: 8,
+      width: '90%',
+      maxWidth: 500,
+      position: 'relative',
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+    },
+    form: {
+      marginTop: theme.spacing(2),
+      '& .MuiTextField-root': {
+        marginBottom: theme.spacing(2),
+      },
+    },
+  }));
 
 const ProductDetails = ({products, product}) => {
     const { image, name, details, price, tags, care } = product;
     const [index, setIndex] = useState(0);
     const {decQty, incQty, qty, onAdd} = useStateContext();
+    const classes = useStyles();
+    const [showModal, setShowModal] = useState(false);
+    const [formData, setFormData] = useState({
+        fabricName: '',
+        review: ''
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log('Form submitted:', formData);
+        setShowModal(false);
+        setFormData({ fabricName: '', review: '' });
+    };
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+    };
 
     const careList = [];
 
@@ -46,6 +107,9 @@ const ProductDetails = ({products, product}) => {
                             <li>L</li>
                             <li>XL</li>
                         </ul>
+                        <div className='btn-box'>
+                        <button className='btn' type='button' onClick={() => console.log("Recommend Size...")}>Recommend Size</button>
+                        </div>
                     </div>
                     <div className='quantity-desc'>
                         <h4>Quantity: </h4>
@@ -67,21 +131,84 @@ const ProductDetails = ({products, product}) => {
                     <div className="desc-background">
                         Overview
                     </div>
-                    <h2>Product Information</h2>  
+                    <h2>Fabric Information</h2>  
                 </div>
                 <div className='desc-details'>
+                    <h4>FABRIC NAME</h4>
+                    <p>Cotton</p>  
+                </div>
+                <div className='desc-care'>
                     <h4>PRODUCT DETAILS</h4>
                     <p>{details[0].children[0].text}</p>  
                 </div>
-                <div className='desc-care'>
-                    <h4>PRODUCT CARE</h4>
-                    <ul>
-                    {careList.map(list => (
-                        <li>{list}</li>
-                    ))}
-                    </ul>
-                </div>
+                <div className='btn-box'>
+                        <button className='btn' type='button' onClick={() => setShowModal(true)}>Add Fabric Review</button>
+                        </div>
             </div>
+
+            <Modal
+                open={showModal}
+                onClose={() => setShowModal(false)}
+                closeAfterTransition
+                BackdropComponent={Backdrop}
+                BackdropProps={{
+                    timeout: 500,
+                }}
+                className={classes.modal}
+            >
+                <Fade in={showModal}>
+                    <Paper className={classes.paper}>
+                        <IconButton 
+                            className={classes.closeButton}
+                            onClick={() => setShowModal(false)}
+                        >
+                            <Close />
+                        </IconButton>
+                        
+                        <Typography variant="h5" gutterBottom>
+                            Add Fabric Review
+                        </Typography>
+                        
+                        <form 
+                            className={classes.form} 
+                            onSubmit={handleSubmit}
+                        >
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Fabric Name"
+                                name="fabricName"
+                                value={formData.fabricName}
+                                onChange={handleChange}
+                                required
+                            />
+                            
+                            <TextField
+                                fullWidth
+                                variant="outlined"
+                                label="Write your review"
+                                name="review"
+                                value={formData.review}
+                                onChange={handleChange}
+                                multiline
+                                rows={4}
+                                required
+                            />
+                            
+                            <Button
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                type="submit"
+                                size="large"
+                            >
+                                Submit Review
+                            </Button>
+                        </form>
+                    </Paper>
+                </Fade>
+            </Modal>
+            
         </div>
     )
 }

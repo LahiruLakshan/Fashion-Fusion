@@ -10,12 +10,15 @@
   },
   "dependencies": {
     "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
+    "@material-ui/lab": "^4.0.0-alpha.61",
     "@next/font": "13.1.0",
     "@sanity/client": "^3.4.1",
     "@sanity/image-url": "^1.0.1",
     "@stripe/stripe-js": "^1.46.0",
     "axios": "^1.7.9",
     "canvas-confetti": "^1.6.0",
+    "cloudinary": "^2.5.1",
     "eslint": "8.30.0",
     "eslint-config-next": "13.1.0",
     "next": "13.1.0",
@@ -24,6 +27,7 @@
     "react-dom": "18.2.0",
     "react-hot-toast": "^2.4.0",
     "react-icons": "^4.7.1",
+    "react-webcam": "^7.2.0",
     "stripe": "^11.5.0",
     "swiper": "^8.4.5"
   },

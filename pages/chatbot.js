@@ -1,90 +1,192 @@
-import React, { useState } from "react";
-import { client } from '../lib/client';
-import { AllProducts } from '../components';
-import axios from "axios";
+import React, { useState, useRef, useEffect } from 'react';
+import { 
+  Container,
+  TextField,
+  IconButton,
+  Avatar,
+  Paper,
+  Typography,
+  CircularProgress,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  Box
+} from '@material-ui/core';
+import { Send, SmartToy } from '@material-ui/icons';
+import { makeStyles } from '@material-ui/core/styles';
 
-const Chatbot = ({ AllFemaleProducts }) => {
-    const BASE_URL = "https://1175-35-237-195-194.ngrok-free.app";
-    const [userInput, setUserInput] = useState("");
-    const [chatHistory, setChatHistory] = useState([]);
-    const [recommendation, setRecommendation] = useState(null);
-    const [formData, setFormData] = useState({
-        subCategory: "",
-        articleType: "",
-        baseColour: "",
-        season: "",
-        usage: "",
+const useStyles = makeStyles((theme) => ({
+  container: {
+    height: '70vh',
+    display: 'flex',
+    flexDirection: 'column',
+    padding: theme.spacing(2),
+  },
+  chatContainer: {
+    flex: 1,
+    overflowY: 'auto',
+    marginBottom: theme.spacing(2),
+    padding: theme.spacing(2),
+  },
+  messageList: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: theme.spacing(2),
+  },
+  userMessage: {
+    alignSelf: 'flex-end',
+    maxWidth: '80%',
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.primary.contrastText,
+    borderRadius: '18px 18px 4px 18px',
+  },
+  botMessage: {
+    alignSelf: 'flex-start',
+    maxWidth: '80%',
+    backgroundColor: theme.palette.grey[100],
+    borderRadius: '18px 18px 18px 4px',
+  },
+  inputContainer: {
+    display: 'flex',
+    gap: theme.spacing(1),
+    padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.paper,
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[2],
+  },
+  loadingContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    padding: theme.spacing(2),
+  },
+}));
+
+const Chatbot = () => {
+  const classes = useStyles();
+  const [input, setInput] = useState('');
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!input.trim()) return;
+
+    // Add user message
+    const newMessage = {
+      id: Date.now(),
+      content: input,
+      role: 'user',
+    };
+
+    setMessages(prev => [...prev, newMessage]);
+    setInput('');
+    setLoading(true);
+
+    try {
+      // Simulate API call
+      const response = await mockApiCall(input);
+      
+      // Add bot response
+      const botMessage = {
+        id: Date.now() + 1,
+        content: response,
+        role: 'assistant',
+      };
+
+      setMessages(prev => [...prev, botMessage]);
+    } catch (error) {
+      console.error('Error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const mockApiCall = (query) => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(`This is a mock response to: "${query}". The actual implementation would connect to your chatbot API.`);
+      }, 1500);
     });
+  };
 
-    const sendMessage = async () => {
-        if (!userInput.trim()) return;
+  return (
+    <Container maxWidth="md" className={classes.container}>
+      <Paper className={classes.chatContainer}>
+        <List className={classes.messageList}>
+          {messages.map((message) => (
+            <ListItem 
+              key={message.id}
+              className={message.role === 'user' ? classes.userMessage : classes.botMessage}
+            >
+              {message.role === 'assistant' && (
+                <ListItemAvatar>
+                  <Avatar>
+                    <SmartToy />
+                  </Avatar>
+                </ListItemAvatar>
+              )}
+              <ListItemText 
+                primary={message.content} 
+                primaryTypographyProps={{
+                  style: { whiteSpace: 'pre-wrap' }
+                }}
+              />
+              {message.role === 'user' && (
+                <ListItemAvatar>
+                  <Avatar src="/static/images/avatar/1.jpg" />
+                </ListItemAvatar>
+              )}
+            </ListItem>
+          ))}
+          {loading && (
+            <ListItem className={classes.botMessage}>
+              <ListItemAvatar>
+                <Avatar>
+                  <SmartToy />
+                </Avatar>
+              </ListItemAvatar>
+              <div className={classes.loadingContainer}>
+                <CircularProgress size={20} />
+                <Typography variant="body2">Thinking...</Typography>
+              </div>
+            </ListItem>
+          )}
+          <div ref={messagesEndRef} />
+        </List>
+      </Paper>
 
-        setChatHistory([...chatHistory, { sender: "You", text: userInput }]);
-
-        try {
-            const response = await axios.post(`${BASE_URL}/chat`, {
-                message: userInput,
-            });
-
-            setChatHistory((prev) => [
-                ...prev,
-                { sender: "Chatbot", text: response.data.response },
-            ]);
-        } catch (error) {
-            console.error("Error:", error);
-        }
-
-        setUserInput("");
-    };
-
-    const getRecommendation = async () => {
-        try {
-            const response = await axios.post(`${BASE_URL}/recommend`, formData);
-            setRecommendation(response.data.recommendation);
-        } catch (error) {
-            console.error("Error fetching recommendation:", error);
-        }
-    };
-
-    return (
-        <div className="container">
-            <h1>Fashion Chatbot</h1>
-
-            <div className="recommendation-form">
-                <h2>Get a Fashion Recommendation</h2>
-                {Object.keys(formData).map((key) => (
-                    <input
-                        key={key}
-                        type="text"
-                        placeholder={key}
-                        value={formData[key]}
-                        onChange={(e) => setFormData({ ...formData, [key]: e.target.value })}
-                    />
-                ))}
-                <button onClick={getRecommendation}>Get Recommendation</button>
-                {recommendation && <p><strong>Recommendation:</strong> {recommendation}</p>}
-            </div>
-
-            <div className="chat-box">
-                <h2>Chat with AI</h2>
-                <div className="chat-history">
-                    {chatHistory.map((msg, index) => (
-                        <p key={index} className={msg.sender === "You" ? "user-message" : "chatbot-message"}>
-                            <strong>{msg.sender}:</strong> {msg.text}
-                        </p>
-                    ))}
-                </div>
-                <input
-                    type="text"
-                    placeholder="Type your message..."
-                    value={userInput}
-                    onChange={(e) => setUserInput(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-                />
-                <button onClick={sendMessage}>Send</button>
-            </div>
-        </div>
-    );
-}
+      <Box component="form" onSubmit={handleSubmit} className={classes.inputContainer}>
+        <TextField
+          fullWidth
+          variant="outlined"
+          placeholder="Type your message here..."
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          disabled={loading}
+          multiline
+          maxRows={4}
+        />
+        <IconButton 
+          color="primary" 
+          type="submit"
+          disabled={!input.trim() || loading}
+        >
+          <Send />
+        </IconButton>
+      </Box>
+    </Container>
+  );
+};
 
 export default Chatbot;

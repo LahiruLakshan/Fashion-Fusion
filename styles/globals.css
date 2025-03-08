@@ -556,6 +556,13 @@ nav input {
 .add-to-cart .btn {
   font-size: 0.875rem;
   width: 40%;
+  /* padding: 10px 100px; */
+}
+
+.btn-box .btn {
+  font-size: 0.875rem;
+  /* width: 40%; */
+  padding: 10px 100px;
 }
 .add-to-cart .price {
   font-weight: 700;
