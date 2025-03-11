@@ -1,24 +1,26 @@
 import React from 'react'
-import {client} from '../lib/client'
-import { AllProducts } from '../components'
+import axios from 'axios'
+import AllProducts from '../components/AllProducts'
+import { BACKEND_URL } from '../config'
 
-const products = ({Allproducts}) => {
-    return (
-        <div className='Allproducts-container'>
-            {Allproducts?.map(prod => (
-                <AllProducts key={prod._id} allproducts={prod} />
-            ))}
-        </div>
-      )
+const Products = ({ products }) => {
+  return (
+    <div className='Allproducts-container'>
+      {products?.map(product => (
+        <AllProducts key={product.id} product={product} />
+      ))}
+    </div>
+  )
 }
 
 export const getServerSideProps = async () => {
-    const query = '*[_type == "product"]';
-    const Allproducts = await client.fetch(query);
-  
-    return {
-      props: { Allproducts }
-    }
+  const { data: products } = await axios.get(
+    `${BACKEND_URL}api/clothes-all`
+  )
+
+  return {
+    props: { products }
+  }
 }
 
-export default products
+export default Products

@@ -1,7 +1,7 @@
 import React from 'react'
 import Image from 'next/image'
 import {CgShoppingCart} from 'react-icons/cg'
-import headerImg from '../src/assets/header.png'
+import headerImg from '../src/assets/event2.png'
 import featured1 from '../src/assets/Featured1.png';
 import featured2 from '../src/assets/Featured2.png';
 import featured3 from '../src/assets/Featured3.png';
@@ -31,7 +31,7 @@ const HeroBanner = () => {
 
         <div className='header-right-side'>
             <div className='header-circle'>
-                <Image className='header-img' src={headerImg} width={650} height={650} alt='header image' />
+                <Image className='header-img' src={headerImg} width={500} height={650} alt='header image' />
             </div>
         </div>
     </header>

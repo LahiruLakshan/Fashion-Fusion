@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { Button, Typography, Paper, Box, CircularProgress } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import CameraKitComponent from "../components/CameraKitComponent";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -102,16 +103,18 @@ const TryOn = () => {
     <div className={classes.root}>
       
       
-          <Webcam
+          {/* <Webcam
             audio={false}
             ref={webcamRef}
             screenshotFormat="image/jpeg"
             width="75%"
             height="50%"
             className={classes.webcam}
-          />
+          /> */}
 
-      
+<div style={{ width: '100vw', height: '100vh' }}>
+      <CameraKitComponent />
+    </div>
      
     </div>
   );

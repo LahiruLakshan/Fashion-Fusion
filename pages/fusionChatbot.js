@@ -3,6 +3,7 @@ import {
   Container,
   TextField,
   IconButton,
+  Button,
   Avatar,
   Paper,
   Typography,
@@ -13,9 +14,10 @@ import {
   ListItemText,
   Box
 } from '@material-ui/core';
+import axios from 'axios';
 import { Send, SmartToy } from '@material-ui/icons';
 import { makeStyles } from '@material-ui/core/styles';
-
+import { CHATBOT_URL } from '../config';
 const useStyles = makeStyles((theme) => ({
   container: {
     height: '70vh',
@@ -63,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Chatbot = () => {
+const FusionChatbot = () => {
   const classes = useStyles();
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
@@ -94,19 +96,38 @@ const Chatbot = () => {
     setLoading(true);
 
     try {
-      // Simulate API call
-      const response = await mockApiCall(input);
-      
-      // Add bot response
-      const botMessage = {
-        id: Date.now() + 1,
-        content: response,
-        role: 'assistant',
-      };
+      // Real API call
+      const response = await axios.post(
+        `${CHATBOT_URL}webhooks/rest/webhook`,
+        {
+          sender: "user",
+          message: input
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
-      setMessages(prev => [...prev, botMessage]);
+      // Handle API response
+      if (response.data && response.data.length > 0) {
+        const botMessage = {
+          id: Date.now() + 1,
+          content: response.data[0].text,
+          role: 'assistant',
+        };
+        setMessages(prev => [...prev, botMessage]);
+      }
     } catch (error) {
       console.error('Error:', error);
+      // Add error message
+      const errorMessage = {
+        id: Date.now() + 1,
+        content: 'Sorry, I encountered an error. Please try again.',
+        role: 'assistant',
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setLoading(false);
     }
@@ -129,33 +150,33 @@ const Chatbot = () => {
               key={message.id}
               className={message.role === 'user' ? classes.userMessage : classes.botMessage}
             >
-              {message.role === 'assistant' && (
+              {/* {message.role === 'assistant' && (
                 <ListItemAvatar>
                   <Avatar>
                     <SmartToy />
                   </Avatar>
                 </ListItemAvatar>
-              )}
+              )} */}
               <ListItemText 
                 primary={message.content} 
                 primaryTypographyProps={{
                   style: { whiteSpace: 'pre-wrap' }
                 }}
               />
-              {message.role === 'user' && (
+              {/* {message.role === 'user' && (
                 <ListItemAvatar>
                   <Avatar src="/static/images/avatar/1.jpg" />
                 </ListItemAvatar>
-              )}
+              )} */}
             </ListItem>
           ))}
           {loading && (
             <ListItem className={classes.botMessage}>
-              <ListItemAvatar>
+              {/* <ListItemAvatar>
                 <Avatar>
                   <SmartToy />
                 </Avatar>
-              </ListItemAvatar>
+              </ListItemAvatar> */}
               <div className={classes.loadingContainer}>
                 <CircularProgress size={20} />
                 <Typography variant="body2">Thinking...</Typography>
@@ -184,9 +205,16 @@ const Chatbot = () => {
         >
           <Send />
         </IconButton>
+        {/* <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit"
+                >
+                  Next: Add Size Measurements
+                </Button> */}
       </Box>
     </Container>
   );
 };
 
-export default Chatbot;
+export default FusionChatbot;

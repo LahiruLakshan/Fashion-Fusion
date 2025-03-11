@@ -3,6 +3,7 @@ import { client, urlFor } from "../../lib/client";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { CgShoppingCart } from "react-icons/cg";
 import { useStateContext } from "../../context/StateContext";
+import axios from 'axios'
 import {
   Modal,
   Button,
@@ -16,6 +17,7 @@ import {
 } from "@material-ui/core";
 import { Close } from "@material-ui/icons";
 import Link from 'next/link';
+import { BACKEND_URL } from "../../config";
 
 // Add these styles
 const useStyles = makeStyles((theme) => ({
@@ -46,8 +48,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductDetails = ({ products, product }) => {
-  const { image, name, details, price, tags, care } = product;
+const ProductDetails = ({ product }) => {
+  const { 
+    title, 
+    sale_price_amount, 
+    description, 
+    average_rating, 
+    reviews_count 
+  } = product
   const [index, setIndex] = useState(0);
   const { decQty, incQty, qty, onAdd } = useStateContext();
   const classes = useStyles();
@@ -56,6 +64,7 @@ const ProductDetails = ({ products, product }) => {
     fabricName: "",
     review: "",
   });
+  let care = 10;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -83,24 +92,15 @@ const ProductDetails = ({ products, product }) => {
     <div className="products">
       <div className="product-detail-container">
         <div className="product-images">
-          <div className="small-images-container">
-            {image?.map((item, ind) => (
-              <img
-                key={ind}
-                src={urlFor(item)}
-                className="small-image"
-                onMouseEnter={() => setIndex(ind)}
-              />
-            ))}
-          </div>
-          <div className="big-image-container">
-            <img src={urlFor(image && image[index])} />
-          </div>
+        <div className="big-image-container">
+        <img src={product.url || 'https://i.pinimg.com/564x/18/7e/e2/187ee2941b72646cd6672aac11c1b97f.jpg'} alt={title} />
+      </div>
+          
         </div>
         <div className="product-details">
           <div className="name-and-category">
-            <h3>{name}</h3>
-            <span>{tags}</span>
+            <h3>{title}</h3>
+            <span>{title}</span>
           </div>
           <div className="btn-box">
             <Link href="/tryOn">
@@ -155,7 +155,7 @@ const ProductDetails = ({ products, product }) => {
               <CgShoppingCart size={20} />
               Add to Cart
             </button>
-            <p className="price">${price}.00</p>
+            <p className="price">${sale_price_amount}.00</p>
           </div>
         </div>
       </div>
@@ -171,7 +171,7 @@ const ProductDetails = ({ products, product }) => {
         </div>
         <div className="desc-care">
           <h4>PRODUCT DETAILS</h4>
-          <p>{details[0].children[0].text}</p>
+          <p>{description}</p>
         </div>
         <div className="btn-box">
           <button
@@ -246,37 +246,27 @@ const ProductDetails = ({ products, product }) => {
     </div>
   );
 };
-export default ProductDetails;
 
-export const getStaticProps = async ({ params: { slug } }) => {
-  const query = `*[_type == "product" && slug.current == '${slug}'][0]`;
-  const productsQuery = '*[_type == "product"]';
-  const product = await client.fetch(query);
-  const products = await client.fetch(productsQuery);
+export async function getStaticPaths() {
+  const { data: products } = await axios.get(`${BACKEND_URL}api/clothes-all`)
+  
+  const paths = products.map(product => ({
+    params: { id: product.id.toString() }
+  }))
 
-  return {
-    props: { products, product },
-  };
-};
+  return { paths, fallback: 'blocking' }
+}
 
-// Generates `/product/1` and `/product/2`
-export const getStaticPaths = async () => {
-  const query = `*[_type == "product"] {
-        slug {
-            current
-        }
-    }`;
+export async function getStaticProps({ params }) {
+  const { data: products } = await axios.get(`${BACKEND_URL}api/clothes-all`)
+  const product = products.find(p => p.id.toString() === params.id)
 
-  const products = await client.fetch(query);
-
-  const paths = products.map((product) => ({
-    params: {
-      slug: product.slug.current,
-    },
-  }));
+  if (!product) return { notFound: true }
 
   return {
-    paths,
-    fallback: "blocking",
-  };
-};
+    props: { product },
+    revalidate: 60 // Optional: ISR for 60 seconds
+  }
+}
+
+export default ProductDetails

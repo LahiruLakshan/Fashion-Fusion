@@ -15,6 +15,7 @@ import {
 import { Alert } from '@material-ui/lab';
 import axios from 'axios';
 import { makeStyles } from '@material-ui/core/styles';
+import { BACKEND_URL } from '../config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -83,14 +84,20 @@ const AddClothPage = () => {
     setSizeData({ ...sizeData, [e.target.name]: e.target.value });
   };
 
+  const handleSubmitAll = (e) => {
+    handleSubmitCloth();
+    handleSubmitSize()
+  };
+
   const handleSubmitCloth = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('http://127.0.0.1:8000/api/clothes-add/', {
+      const response = await axios.post(`${BACKEND_URL}api/clothes-add/`, {
         ...clothData,
         sale_price_with_symbol: `$${clothData.sale_price_amount}`,
         retail_price_with_symbol: `$${clothData.retail_price_amount}`
       });
+      
       
       setClothId(response.data.id);
       setActiveStep(1);
@@ -106,7 +113,7 @@ const AddClothPage = () => {
   const handleSubmitSize = async () => {
     try {
       setLoading(true);
-      await axios.post('http://localhost:8000/api/add_shirt_size/', {
+      await axios.post(`${BACKEND_URL}api/add_shirt_size/`, {
         ...sizeData,
         cloth: clothId
       });

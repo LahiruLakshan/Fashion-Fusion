@@ -14,7 +14,7 @@ const Home = ({products}) => {
       <HeroBanner />
       <EventsBanner />
 
-      <div className='products-outer-container'>
+      {/* <div className='products-outer-container'>
         <div className='subtitle'>
           <span>PRODUCTS</span>
           <h2>Check What We Have</h2>
@@ -50,7 +50,7 @@ const Home = ({products}) => {
             ))}
           </div>
         </Swiper>
-      </div>
+      </div> */}
 
       <FeaturesBanner />
       <Newsletter />

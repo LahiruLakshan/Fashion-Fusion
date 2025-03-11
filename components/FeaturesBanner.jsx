@@ -7,7 +7,7 @@ const FeaturesBanner = () => {
   return (
     <section className='features-section'>
       <div className='title'>
-        <h1>Unique and Authentic Vintage Designer Jewellery</h1>
+        <h1>Fusion Chatbot Assistant</h1>
       </div>
 
       <div className='content'>
@@ -37,8 +37,8 @@ const FeaturesBanner = () => {
           <Image src={img} width={300} height={350} alt='img' />
           <div>
             <p>This piece is ethically crafted in our small family-owned workshop in Peru with unmatched attention to detail and care. The Natural color is the actual natural color of the fiber, undyed and 100% traceable.</p>
-            <Link href={'/products'}>
-              <button className='btn' type='button'>See All Product</button>
+            <Link href={'/fusionChatbot'}>
+              <button className='btn' type='button'>Chat with Fusion</button>
             </Link>
           </div>
         </div>

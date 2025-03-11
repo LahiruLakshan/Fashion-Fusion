@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import event1 from '../src/assets/event1.png' 
+import event1 from '../src/assets/event2.png' 
 import event2 from '../src/assets/event2.png' 
 import event3 from '../src/assets/event3.png' 
 
@@ -14,13 +14,13 @@ const EventsBanner = () => {
 
       <div className='event-banner'>
         <div className='event-banner-left'>
-          <div className='event-card'>
+          {/* <div className='event-card'>
             <div className='content'>
               <h3>GET UP TO <span>60%</span></h3>
               <p>For the summer season</p>
             </div>
             <Image src={event1} alt='event' />
-          </div>
+          </div> */}
 
           <div className='event-card'>
             <h3>GET 30% Off</h3>
