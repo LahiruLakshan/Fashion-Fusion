@@ -22,7 +22,7 @@ const Navbar = ({Searchproducts}) => {
         <Link href='/products'><li>Products</li></Link>
         {/* <Link href='/kids'><li>Kids</li></Link> */}
         {/* <Link href='/products'><li>All Products</li></Link> */}
-        <Link href='/fusionChatbot'><li>Chatbot</li></Link>
+        {/* <Link href='/fusionChatbot'><li>Chatbot</li></Link> */}
         <Link href='/recommendSize'><li>Recommend Size</li></Link>
         <Link href='/addClothPage'><li>Add Cloth</li></Link>
       </ul>
