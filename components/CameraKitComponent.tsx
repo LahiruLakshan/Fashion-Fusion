@@ -34,7 +34,7 @@ const CameraKitComponent = () => {
 
         // Load and apply lens
         const lens = await cameraKit.lensRepository.loadLens(
-          '4319a9b3-00d9-46a2-b66d-1684f6c92db5',
+          '4319a9b3-00d9-46a2-b66d-1684f6c92db5',//lens_id
           '31955505-9350-4be2-a3c9-f711d2375f5c'
         );
         await session.applyLens(lens);

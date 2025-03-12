@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { client, urlFor } from "../../lib/client";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { CgShoppingCart } from "react-icons/cg";
@@ -64,14 +64,91 @@ const ProductDetails = ({ product }) => {
     fabricName: "",
     review: "",
   });
+  const [fetchData, setFetchData] = useState({
+    fabric_name: "",
+    combined_review: "",
+  });
   let care = 10;
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Form submitted:", formData);
+    let data = JSON.stringify({
+      "fabric_name": product?.fabric_name,
+      "review_text": formData.review
+    });
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${BACKEND_URL}api/add-fabric-review/`,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+
+    axios.request(config)
+    .then((response) => {
+      alert("User review send successfully!")
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+
     setShowModal(false);
     setFormData({ fabricName: "", review: "" });
   };
+
+  useEffect(() =>{
+    if(product?.fabric_name){
+
+      let config = {
+        method: 'get',
+        maxBodyLength: Infinity,
+        url: `${BACKEND_URL}api/fabric-summary/${product?.fabric_name}`,
+        headers: { }
+      };
+
+      axios.request(config)
+      .then((response) => {
+        setFetchData(response.data)
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+    }
+
+  },[product?.fabric_name])
+
+  const handleRecommendSize = () =>{
+    let data = JSON.stringify({
+      "user_id": 1,
+      "cloth_id": product?.id
+    });
+    
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: `${BACKEND_URL}api/recommend-size/`,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      data : data
+    };
+    
+    axios.request(config)
+    .then((response) => {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  }
 
   const handleChange = (e) => {
     setFormData({
@@ -126,7 +203,7 @@ const ProductDetails = ({ product }) => {
               <button
                 className="btn"
                 type="button"
-                onClick={() => console.log("Recommend Size...")}
+                onClick={() => handleRecommendSize()}
               >
                 Recommend Size
               </button>
@@ -167,11 +244,15 @@ const ProductDetails = ({ product }) => {
         </div>
         <div className="desc-details">
           <h4>FABRIC NAME</h4>
-          <p>Cotton</p>
+          <p>{product?.fabric_name}</p>
         </div>
         <div className="desc-care">
-          <h4>PRODUCT DETAILS</h4>
-          <p>{description}</p>
+          <h4>FABRIC DESCRIPTION</h4>
+          <p>{product?.fabric_description}</p>
+        </div>
+        <div className="desc-care">
+          <h4>FABRIC REVIEW SUMMARY</h4>
+          <p>{fetchData?.combined_review}</p>
         </div>
         <div className="btn-box">
           <button
@@ -208,7 +289,7 @@ const ProductDetails = ({ product }) => {
             </Typography>
 
             <form className={classes.form} onSubmit={handleSubmit}>
-              <TextField
+              {/* <TextField
                 fullWidth
                 variant="outlined"
                 label="Fabric Name"
@@ -216,7 +297,7 @@ const ProductDetails = ({ product }) => {
                 value={formData.fabricName}
                 onChange={handleChange}
                 required
-              />
+              /> */}
 
               <TextField
                 fullWidth

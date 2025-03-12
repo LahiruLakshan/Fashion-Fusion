@@ -60,6 +60,10 @@ const AddClothPage = () => {
     description: '',
     reviews_count: '',
     average_rating: '',
+    lens_id: '',
+    fabric_name: '',
+    fabric_url: '',
+    fabric_description: '',
     style: ''
   });
 
@@ -133,6 +137,10 @@ const AddClothPage = () => {
         description: '',
         reviews_count: '',
         average_rating: '',
+        lens_id: '',
+        fabric_name: '',
+        fabric_url: '',
+        fabric_description: '',
         style: ''
       });
       setSizeData({
@@ -325,6 +333,48 @@ const AddClothPage = () => {
                   inputProps={{ min: 0, max: 5, step: 0.1 }}
                   value={clothData.average_rating}
                   onChange={handleClothChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Lens ID"
+                  name="lens_id"
+                  value={clothData.lens_id}
+                  onChange={handleClothChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Fabric Name"
+                  name="fabric_name"
+                  value={clothData.fabric_name}
+                  onChange={handleClothChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  fullWidth
+                  label="Fabric URL"
+                  name="fabric_url"
+                  value={clothData.fabric_url}
+                  onChange={handleClothChange}
+                  required
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <TextField
+                  fullWidth
+                  label="Fabric Description"
+                  name="fabric_description"
+                  value={clothData.fabric_description}
+                  onChange={handleClothChange}
+                  multiline
+                  rows={4}
                   required
                 />
               </Grid>
