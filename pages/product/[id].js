@@ -180,8 +180,8 @@ const ProductDetails = ({ product }) => {
             <span>{title}</span>
           </div>
           <div className="btn-box">
-            <Link href="/tryOn">
-              <button
+          <Link href={`/tryOn?id=${product.lens_id}`}>
+          <button
                 className="btn"
                 type="button"
                 onClick={() => console.log("Recommend Size...")}
