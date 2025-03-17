@@ -42,16 +42,22 @@ const RecommendSize = () => {
 
     try {
       const blob = await fetch(imgSrc).then((res) => res.blob());
-      const file = new File([blob], "webcam-capture.jpg", { type: "image/jpeg" });
+      const file = new File([blob], "webcam-capture.jpg", {
+        type: "image/jpeg",
+      });
       const authToken = JSON.parse(localStorage.getItem("authToken")) || {};
       const formData = new FormData();
       formData.append("image", file);
       formData.append("height", 72);
       formData.append("user_id", authToken.user_id ?? 1);
 
-      const response = await axios.post(`${BACKEND_URL}api/get-measurements/`, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const response = await axios.post(
+        `${BACKEND_URL}api/get-measurements/`,
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        }
+      );
 
       if (response.data && response.data.measurements) {
         setMeasurements(response.data.measurements);
@@ -73,9 +79,13 @@ const RecommendSize = () => {
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md text-center">
             <h2 className="text-2xl font-bold mb-4">Camera Guidelines</h2>
             <ul className="text-left list-disc pl-5">
-              <li>Use a clean, uncluttered background to avoid distractions.</li>
+              <li>
+                Use a clean, uncluttered background to avoid distractions.
+              </li>
               <li>Stand 8-12 feet away to capture your entire body.</li>
-              <li>Use a tripod or stabilize the camera to avoid motion blur.</li>
+              <li>
+                Use a tripod or stabilize the camera to avoid motion blur.
+              </li>
             </ul>
             <button
               onClick={() => setShowPopup(false)}
@@ -90,7 +100,11 @@ const RecommendSize = () => {
       <div className="w-full max-w-4xl flex flex-col items-center">
         <div className="w-full max-w-3xl mb-8">
           {imgSrc ? (
-            <img src={imgSrc} alt="Captured" className="w-full max-w-[640px] rounded-lg shadow-lg mx-auto" />
+            <img
+              src={imgSrc}
+              alt="Captured"
+              className="w-full max-w-[640px] rounded-lg shadow-lg mx-auto"
+            />
           ) : (
             <Webcam
               audio={false}
@@ -118,7 +132,11 @@ const RecommendSize = () => {
             Take Photo in 5 Seconds
           </button>
         </div>
-        {countdown > 0 && <p className="text-xl font-bold text-[#0F3054] mb-8">Capturing in {countdown} seconds...</p>}
+        {countdown > 0 && (
+          <p className="text-xl font-bold text-[#0F3054] mb-8">
+            Capturing in {countdown} seconds...
+          </p>
+        )}
         <div className="w-full max-w-[600px] p-6 mb-8">
           <button
             onClick={handleUpload}
@@ -140,12 +158,18 @@ const RecommendSize = () => {
             <h2 className="text-2xl font-bold mb-4">Your Body Measurements</h2>
             <table className="w-full">
               <tbody>
-                {Object.entries(measurements).map(([key, value]) => (
-                  <tr key={key} className="border-b border-gray-200">
-                    <td className="py-2 font-bold">{key.replace(/\b\w/g, (l) => l.toUpperCase())}</td>
-                    <td className="py-2 text-right">{value.toFixed(2)} inches</td>
-                  </tr>
-                ))}
+                {Object.entries(measurements)
+                  .filter(([key]) => key.toLowerCase() !== "height")
+                  .map(([key, value]) => (
+                    <tr key={key} className="border-b border-gray-200">
+                      <td className="py-2 font-bold">
+                        {key.replace(/\b\w/g, (l) => l.toUpperCase())}
+                      </td>
+                      <td className="py-2 text-right">
+                        {value.toFixed(2)} inches
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>
