@@ -88,13 +88,7 @@ const FabricInfo = ({ productInfo }) => {
   const handleSubmitReview = async () => {
     try {
       // Concatenate all review fields into a single string
-      const reviewText = `
-        Texture & Feel: ${reviewData.textureFeel}
-        Breathability & Comfort: ${reviewData.breathabilityComfort}
-        Durability & Strength: ${reviewData.durabilityStrength}
-        Stretchability & Flexibility: ${reviewData.stretchabilityFlexibility}
-        Care & Maintenance: ${reviewData.careMaintenance}
-      `;
+      const reviewText = `${reviewData.textureFeel} ${reviewData.breathabilityComfort} ${reviewData.durabilityStrength} ${reviewData.stretchabilityFlexibility} ${reviewData.careMaintenance}`;
   
       // Submit review data to the backend
       const response = await axios.post(`${BACKEND_URL}/api/add-fabric-review/`, {
