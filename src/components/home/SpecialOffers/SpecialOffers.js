@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Heading from "../Products/Heading";
 import Product from "../Products/Product";
 import {
@@ -7,49 +7,78 @@ import {
   spfThree,
   spfFour,
 } from "../../../assets/images/index";
+import Slider from "react-slick";
 
+import axios from "axios";
+import { BACKEND_URL } from "../../../constants/config";
+import SampleNextArrow from "../NewArrivals/SampleNextArrow";
+import SamplePrevArrow from "../NewArrivals/SamplePrevArrow";
 const SpecialOffers = () => {
+  const [currentItems, setCurrentItems] = useState([]);
+
+  useEffect(() => {
+    const fetchAllItems = async () => {
+      await axios.get(`${BACKEND_URL}api/clothes-all`).then((response) => {
+        console.log("response : ", response.data);
+        setCurrentItems(response.data);
+      });
+    };
+    fetchAllItems();
+  }, []);
+  const settings = {
+    infinite: true,
+    speed: 500,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
+    responsive: [
+      {
+        breakpoint: 1025,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 769,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          infinite: true,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+        },
+      },
+    ],
+  };
   return (
-    <div className="w-full pb-20">
+    <div className="w-full py-16">
       <Heading heading="Special Offers" />
-      <div className="w-full grid grid-cols-1 md:grid-cols-2 lgl:grid-cols-3 xl:grid-cols-4 gap-10">
-        <Product
-          _id="1101"
-          img={spfOne}
-          productName="Cap for Boys"
-          price="35.00"
-          color="Blank and White"
-          badge={true}
-          des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-        />
-        <Product
-          _id="1102"
-          img={spfTwo}
-          productName="Tea Table"
-          price="180.00"
-          color="Gray"
-          badge={true}
-          des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-        />
-        <Product
-          _id="1103"
-          img={spfThree}
-          productName="Headphones"
-          price="25.00"
-          color="Mixed"
-          badge={true}
-          des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-        />
-        <Product
-          _id="1104"
-          img={spfFour}
-          productName="Sun glasses"
-          price="220.00"
-          color="Black"
-          badge={true}
-          des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-        />
-      </div>
+      <Slider {...settings}>
+      {currentItems &&
+        currentItems.map((item) => (
+          <div key={item._id} className="w-full px-2">
+            <Product
+              _id={item._id}
+              img={item.url}
+              productName={item.title}
+              price={item.sale_price_amount}
+              color={item.color}
+              badge={item.style}
+              des={item.category_name}
+              item={item}
+            />
+          </div>
+        ))}
+      </Slider>
     </div>
   );
 };

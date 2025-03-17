@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import Heading from "../Products/Heading";
 import Product from "../Products/Product";
@@ -10,8 +10,26 @@ import {
 } from "../../../assets/images/index";
 import SampleNextArrow from "./SampleNextArrow";
 import SamplePrevArrow from "./SamplePrevArrow";
+import axios from "axios";
+import { BACKEND_URL } from "../../../constants/config";
 
 const NewArrivals = () => {
+  const [currentItems, setCurrentItems] = useState([]);
+  const [style, setStyle] = useState("");
+
+    useEffect(() => {
+      const fetchAllItems = async () => {
+        await axios.get(`${BACKEND_URL}api/trending-items`).then((response) =>{
+          console.log("response : ", response.data);
+          setCurrentItems(response.data.trending_items)
+          setStyle(response.data.trending_style)
+        })
+      }
+      fetchAllItems()
+    },[])
+  
+
+
   const settings = {
     infinite: true,
     speed: 500,
@@ -48,63 +66,25 @@ const NewArrivals = () => {
   };
   return (
     <div className="w-full py-16">
-      <Heading heading="Trending Clothes" />
+      {style && <Heading heading="Trending Clothes" />}
       <Slider {...settings}>
-        <div className="px-2">
-          <Product
-            _id="100001"
-            img={newArrOne}
-            productName="Round Table Clock"
-            price="44.00"
-            color="Black"
-            badge={true}
-            des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-          />
-        </div>
-        <div className="px-2">
-          <Product
-            _id="100002"
-            img={newArrTwo}
-            productName="Smart Watch"
-            price="250.00"
-            color="Black"
-            badge={true}
-            des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-          />
-        </div>
-        <div className="px-2">
-          <Product
-            _id="100003"
-            img={newArrThree}
-            productName="cloth Basket"
-            price="80.00"
-            color="Mixed"
-            badge={true}
-            des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-          />
-        </div>
-        <div className="px-2">
-          <Product
-            _id="100004"
-            img={newArrFour}
-            productName="Funny toys for babies"
-            price="60.00"
-            color="Mixed"
-            badge={false}
-            des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-          />
-        </div>
-        <div className="px-2">
-          <Product
-            _id="100005"
-            img={newArrTwo}
-            productName="Funny toys for babies"
-            price="60.00"
-            color="Mixed"
-            badge={false}
-            des="Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic excepturi quibusdam odio deleniti reprehenderit facilis."
-          />
-        </div>
+        {
+          currentItems.map((item) =>{
+            <div className="px-2">
+           <Product
+              _id={item._id}
+              img={item.url}
+              productName={item.title}
+              price={item.sale_price_amount}
+              color={item.color}
+              badge={item.style}
+              des={item.category_name}
+              item={item}
+            />
+          </div>
+          })
+        }
+
       </Slider>
     </div>
   );

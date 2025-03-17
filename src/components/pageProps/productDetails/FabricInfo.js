@@ -25,7 +25,7 @@ const FabricInfo = ({ productInfo }) => {
   const fetchAllItems = async () => {
     try {
       await axios
-        .get(`${BACKEND_URL}api/fabric-summary/cotton/`)
+        .get(`${BACKEND_URL}api/fabric-summary/${productInfo?.item?.fabric_name}/`)
         .then((response) => {
           console.log("response : ", response.data);
           setFabricReview(response.data.message);
@@ -81,66 +81,32 @@ const FabricInfo = ({ productInfo }) => {
         <p className="text-md ">{productInfo?.item?.fabric_description}</p>
       </div>
 
-      <div className="flex flex-col">
-        <p className="text-sm text-gray-600">Fabric Description</p>
-        <p className="text-md ">{productInfo?.item?.fabric_description}</p>
-      </div>
-
      <div className="flex flex-col">
         <p className="text-sm text-gray-600">Fabric Review</p>
         <p className="text-md ">{fabricReview}</p>
       </div>
 
-      {/* Price */}
-      <p className="text-xl font-semibold">LKR {productInfo?.price}</p>
-
-      {/* Ratings and Reviews Count */}
-      <div className="flex items-center gap-2">
-        <div className="flex">
-          {renderStars(productInfo?.item?.average_rating)}
-        </div>
-        <p className="text-sm text-gray-600">
-          ({productInfo?.item?.average_rating} out of 5,{" "}
-          {productInfo?.item?.reviews_count} reviews)
-        </p>
-      </div>
+     
 
       {/* Description */}
       <p className="text-base text-gray-600">
         {productInfo?.item?.description}
       </p>
 
+      
+
+
+      {/* Add to Cart Button */}
+      <button
+        className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
+      >
+        Add a Review
+      </button>
+
       {/* Review Prompt */}
       {reviewsCount === 0 && (
         <p className="text-sm text-gray-600">Be the first to leave a review.</p>
       )}
-
-      {/* Color */}
-      <p className="font-medium text-lg">
-        <p className="text-sm text-gray-600">Color: {productInfo?.color}</p>
-      </p>
-
-      {/* Add to Cart Button */}
-      <button
-        onClick={() =>
-          dispatch(
-            addToCart({
-              _id: productInfo.id,
-              name: productInfo.productName,
-              quantity: 1,
-              image: productInfo.img,
-              badge: productInfo.badge,
-              price: productInfo.price,
-              colors: productInfo.color,
-            })
-          )
-        }
-        className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
-      >
-        Add to Cart
-      </button>
-
-      
     </div>
   );
 };

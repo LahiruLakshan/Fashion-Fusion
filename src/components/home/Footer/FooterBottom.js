@@ -12,7 +12,7 @@ const FooterBottom = () => {
           Copyright 2022 | Fusion shopping | All Rights Reserved |
           <a href="https://reactbd.com/" target="_blank" rel="noreferrer">
             <span className="ml-1 font-medium group-hover:text-primeColor">
-              Powered by ReactBD.com
+              Powered by Fusion.lk
             </span>
           </a>
         </p>
