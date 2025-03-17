@@ -9,7 +9,7 @@ const ProductInfo = ({ productInfo }) => {
   const dispatch = useDispatch();
 
   // Mock rating value (replace with actual rating from productInfo if available)
-  const reviewsCount =  0; // Use productInfo.reviews_count if available
+  const reviewsCount = 0; // Use productInfo.reviews_count if available
 
   const handleTryOn = () => {
     navigate(`/try-on`, {
@@ -62,18 +62,26 @@ const ProductInfo = ({ productInfo }) => {
 
       {/* Ratings and Reviews Count */}
       <div className="flex items-center gap-2">
-        <div className="flex">{renderStars(productInfo?.item?.average_rating)}</div>
+        <div className="flex">
+          {renderStars(productInfo?.item?.average_rating)}
+        </div>
         <p className="text-sm text-gray-600">
-          ({productInfo?.item?.average_rating} out of 5, {productInfo?.item?.reviews_count} reviews)
+          ({productInfo?.item?.average_rating} out of 5,{" "}
+          {productInfo?.item?.reviews_count} reviews)
         </p>
       </div>
 
       {/* Description */}
-      <p className="text-base text-gray-600">{productInfo?.item?.description}</p>
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Fabric Description</p>
 
+        <p className="text-base">
+          {productInfo?.item?.description}
+        </p>
+      </div>
       {/* Color */}
       <p className="font-medium text-lg">
-      <p className="text-sm text-gray-600">Color: {productInfo?.color}</p>
+        <p className="text-sm text-gray-600">Color: {productInfo?.color}</p>
       </p>
 
       {/* Add to Cart Button */}
@@ -95,15 +103,17 @@ const ProductInfo = ({ productInfo }) => {
       >
         Add to Cart
       </button>
-
+      <div className="flex flex-row justify-between">
       {/* Categories */}
       <p className="font-normal text-sm">
         <span className="text-base font-medium">Categories:</span>{" "}
         {productInfo?.item?.category_name}
-      </p><p className="font-normal text-sm">
+      </p>
+      <p className="font-normal text-sm">
         <span className="text-base font-medium">Style:</span>{" "}
         {productInfo?.item?.style}
       </p>
+    </div>
     </div>
   );
 };
