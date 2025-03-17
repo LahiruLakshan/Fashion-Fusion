@@ -12,6 +12,8 @@ const ProductInfo = ({ productInfo }) => {
   const reviewsCount = 0; // Use productInfo.reviews_count if available
 
   const handleTryOn = () => {
+    console.log(" productInfo?.item?.id : ",  productInfo?.item?.id);
+    
     navigate(`/try-on`, {
       state: {
         cloth_id: productInfo?.item?.id,

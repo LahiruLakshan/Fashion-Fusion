@@ -2,14 +2,17 @@ import React, { useEffect, useRef, useState } from "react";
 import CameraKitComponent from "../../components/CameraKitComponent/CameraKitComponent";
 import axios from "axios";
 import { BACKEND_URL } from "../../constants/config";
+import { useLocation } from "react-router-dom";
 
 const TryOn = () => {
+  const location = useLocation();  
   const webcamRef = useRef(null);
   const [recommendSize, setRecommendSize] = useState(null);
   const [imgSrc, setImgSrc] = useState(null);
   const [countdown, setCountdown] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [cloudinaryUrl, setCloudinaryUrl] = useState(null);
+  const[lensId, setLensId] = useState(null);
 
   const capture = () => {
     console.log("capturing");
@@ -53,6 +56,29 @@ const TryOn = () => {
     }
   };
 
+  const getClothDetail = async (size) => {
+    try {
+      await axios
+        .get(`${BACKEND_URL}api/cloth/${location.state.cloth_id}/`)
+        .then((response) => {
+          console.log("response single cloth : ", response.data);
+          if (size === "L") {
+            setLensId(response.data.lens_id_l)
+          }
+          else if (size === "M") {
+            setLensId(response.data.lens_id_m)
+          }
+          else if (size === "S") {
+            setLensId(response.data.lens_id_s)
+          }
+          
+        })
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+
   useEffect(() => {
     const fetchAllItems = async () => {
       const authToken = JSON.parse(localStorage.getItem("authToken"));
@@ -63,7 +89,7 @@ const TryOn = () => {
             `${BACKEND_URL}api/recommend-size/`,
             {
               user_id: authToken.user_id,
-              cloth_id: 1,
+              cloth_id: location.state.cloth_id,
             },
             {
               headers: {
@@ -71,7 +97,10 @@ const TryOn = () => {
               },
             }
           )
-          .then((response) => setRecommendSize(response.data.recommended_size));
+          .then((response) => {
+            console.log(response.data.recommended_size);
+            getClothDetail(response.data.recommended_size)
+            setRecommendSize(response.data.recommended_size);});
 
         console.log("response : ", response.data.recommended_size);
       } catch (err) {
@@ -79,7 +108,7 @@ const TryOn = () => {
       }
     };
     fetchAllItems();
-  }, []);
+  }, [location]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-8">
@@ -104,7 +133,7 @@ const TryOn = () => {
       {/* CameraKitComponent */}
       {recommendSize && (
         <div className="w-[80vw] h-[90vh]">
-          <CameraKitComponent lens_id={recommendSize === "L" ? "99fea2eb-7ea0-44d3-99f8-bdccb639a6b8":"2c02213a-ad79-42c0-a75a-86642206acc8"}/>
+         {lensId && <CameraKitComponent lens_id={lensId}/>}
         </div>
       )}
     </div>
