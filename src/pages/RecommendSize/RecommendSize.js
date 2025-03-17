@@ -42,11 +42,11 @@ const RecommendSize = () => {
       // Convert data URL to Blob
       const blob = await fetch(imgSrc).then((res) => res.blob());
       const file = new File([blob], "webcam-capture.jpg", { type: "image/jpeg" });
-
+      const authToken = JSON.parse(localStorage.getItem("authToken"));
       const formData = new FormData();
       formData.append("image", file);
       formData.append("height", 72);
-      formData.append("user_id", 1); // Replace with actual user ID
+      formData.append("user_id", authToken.user_id ?? 1); // Replace with actual user ID
 
       const response = await axios.post(`${BACKEND_URL}api/get-measurements/`, formData, {
         headers: { "Content-Type": "multipart/form-data" },

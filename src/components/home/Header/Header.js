@@ -9,6 +9,12 @@ import { navBarList } from "../../../constants";
 import Flex from "../../designLayouts/Flex";
 
 const Header = () => {
+  const authToken = JSON.parse(localStorage.getItem("authToken")); // Assuming authToken is stored in localStorage
+const userRole = authToken?.role || "user"; // Default role is 'user'
+
+const filteredNavBarList = navBarList.filter(
+  (item) => !item.adminOnly || userRole === "admin"
+);
   const [showMenu, setShowMenu] = useState(true);
   const [sidenav, setSidenav] = useState(false);
   const [category, setCategory] = useState(false);
@@ -44,7 +50,7 @@ const Header = () => {
                 className="flex items-center w-auto z-50 p-0 gap-2"
               >
                 <>
-                  {navBarList.map(({ _id, title, link }) => (
+                  {filteredNavBarList.map(({ _id, title, link }) => (
                     <NavLink
                       key={_id}
                       className="flex font-normal hover:font-bold w-auto h-6 justify-center items-center px-12 text-base text-[#767676] hover:underline underline-offset-[4px] decoration-[1px] hover:text-[#262626] md:border-r-[2px] border-r-gray-300 hoverEffect last:border-r-0"
@@ -76,7 +82,7 @@ const Header = () => {
                       alt="logoLight"
                     />
                     <ul className="text-gray-200 flex flex-col gap-2">
-                      {navBarList.map((item) => (
+                      {filteredNavBarList.map((item) => (
                         <li
                           className="font-normal hover:font-bold items-center text-lg text-gray-200 hover:underline underline-offset-[4px] decoration-[1px] hover:text-white md:border-r-[2px] border-r-gray-300 hoverEffect last:border-r-0"
                           key={item._id}

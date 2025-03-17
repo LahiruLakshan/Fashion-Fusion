@@ -30,7 +30,9 @@ const AddClothPage = () => {
     description: '',
     reviews_count: '',
     average_rating: '',
-    lens_id: '',
+    lens_id_s: '',
+    lens_id_m: '',
+    lens_id_l: '',
     fabric_name: '',
     fabric_description: '',
     style: '',
@@ -128,7 +130,9 @@ const AddClothPage = () => {
         description: '',
         reviews_count: '',
         average_rating: '',
-        lens_id: '',
+        lens_id_s: '',
+        lens_id_m: '',
+        lens_id_l: '',
         fabric_name: '',
         fabric_description: '',
         style: '',
@@ -328,11 +332,33 @@ const AddClothPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700">Lens ID</label>
+                <label className="block text-sm font-medium text-gray-700">Lens ID: SMALL</label>
                 <input
                   type="text"
-                  name="lens_id"
-                  value={clothData?.lens_id}
+                  name="lens_id_s"
+                  value={clothData?.lens_id_s}
+                  onChange={handleClothChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-gray-800 focus:border-gray-800"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Lens ID: MEDIUM</label>
+                <input
+                  type="text"
+                  name="lens_id_m"
+                  value={clothData?.lens_id_m}
+                  onChange={handleClothChange}
+                  className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-gray-800 focus:border-gray-800"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Lens ID: LARGE</label>
+                <input
+                  type="text"
+                  name="lens_id_l"
+                  value={clothData?.lens_id_l}
                   onChange={handleClothChange}
                   className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-gray-800 focus:border-gray-800"
                   required

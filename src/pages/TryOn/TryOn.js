@@ -55,12 +55,14 @@ const TryOn = () => {
 
   useEffect(() => {
     const fetchAllItems = async () => {
+      const authToken = JSON.parse(localStorage.getItem("authToken"));
+
       try {
         const response = await axios
           .post(
             `${BACKEND_URL}api/recommend-size/`,
             {
-              user_id: 1,
+              user_id: authToken.user_id,
               cloth_id: 1,
             },
             {
@@ -90,7 +92,7 @@ const TryOn = () => {
           className="w-full rounded-lg shadow-lg"
         /> */}
       {recommendSize && (
-        <div className="flex gap-4 mb-8 flex-wrap justify-center bg-white shadow-lg p-6 rounded-lg">
+        <div className="flex gap-4 mb-8 flex-wrap justify-center bg-white shadow-lg p-6 rounded-lg absolute top-[300px] left-[250px]">
           <h3
             disabled={!!imgSrc}
             className="px-6 py-2 bg-[#0F3054] text-white rounded-lg hover:bg-[#001F3F] disabled:bg-gray-400 disabled:cursor-not-allowed"

@@ -39,6 +39,7 @@ export const navBarList = [
     _id: 1005,
     title: "Add Cloth",
     link: "/add-cloth",
+    adminOnly: true,
   },
 ];
 // =================== NavBarList End here ======================
