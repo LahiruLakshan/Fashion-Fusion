@@ -166,7 +166,7 @@ const RecommendSize = () => {
                         {key.replace(/\b\w/g, (l) => l.toUpperCase())}
                       </td>
                       <td className="py-2 text-right">
-                        {value.toFixed(2)} cm
+                        {value.toFixed(2)} inches
                       </td>
                     </tr>
                   ))}

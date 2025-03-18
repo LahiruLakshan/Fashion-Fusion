@@ -798,7 +798,7 @@ const AddClothPage = () => {
         {!loading && activeStep === 1 && (clothData.category_name === "shirt" || clothData.category_name === "t-shirt" || clothData.category_name === "jacket" || clothData.category_name === "hoodie") &&  (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -946,7 +946,7 @@ const AddClothPage = () => {
         {!loading && activeStep === 2 && (clothData.category_name === "shirt" || clothData.category_name === "t-shirt" || clothData.category_name === "jacket" || clothData.category_name === "hoodie") && (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1094,7 +1094,7 @@ const AddClothPage = () => {
         {!loading && activeStep === 3 && (clothData.category_name === "shirt" || clothData.category_name === "t-shirt" || clothData.category_name === "jacket" || clothData.category_name === "hoodie") && (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1242,7 +1242,7 @@ const AddClothPage = () => {
 {!loading && activeStep === 1 && (clothData.category_name === "trouser" || clothData.category_name === "short") &&  (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1390,7 +1390,7 @@ const AddClothPage = () => {
         {!loading && activeStep === 2 && (clothData.category_name === "trouser" || clothData.category_name === "short") && (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1538,7 +1538,7 @@ const AddClothPage = () => {
         {!loading && activeStep === 3 && (clothData.category_name === "trouser" || clothData.category_name === "short") && (
           <form>
             <h2 className="text-2xl font-semibold mb-6 text-gray-800">
-              Size Measurements (in cm)
+              Size Measurements (in inches)
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
