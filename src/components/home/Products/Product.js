@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BsSuitHeartFill } from "react-icons/bs";
 import { GiReturnArrow } from "react-icons/gi";
 import { FaShoppingCart, FaStar, FaStarHalfAlt } from "react-icons/fa";
@@ -26,6 +26,8 @@ const Product = (props) => {
       },
     });
   };
+
+ 
 
 
   // Function to render star ratings

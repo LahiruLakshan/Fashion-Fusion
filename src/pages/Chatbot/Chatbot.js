@@ -2,12 +2,30 @@ import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { IoSendSharp } from "react-icons/io5";
 import { CHATBOT_URL } from '../../constants/config';
+import { useNavigate } from "react-router-dom";
 
 const Chatbot = () => {
+    const navigate = useNavigate();
+  
+  const [sku, setSku] = useState('');
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
+
+  const handleProductDetails = (id) => {
+
+    
+    navigate(`/chat-product`, {
+      state: {
+        item: id,
+      },
+    });
+  };
+
+  // useEffect(() => {
+  //   handleProductDetails("sm2307284532125608")
+  // },[])
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -57,6 +75,8 @@ const Chatbot = () => {
         if (botMessage?.content?.includes("I recommend:")) {
           
           const lastTwoChars = botMessage?.content.slice(-2);
+          setSku(lastTwoChars);
+          // handleProductDetails(lastTwoChars);
       }
         console.log(botMessage.content);
         
@@ -93,6 +113,9 @@ const Chatbot = () => {
               <p className="whitespace-pre-wrap">{message.content}</p>
             </div>
           ))}
+          {!sku && <button onClick={() => handleProductDetails(sku)} className="bg-primeColor text-white text-lg font-bodyFont w-[185px] h-[50px] hover:bg-black duration-300 font-bold rounded-md">
+            Go To Product
+          </button>}
           {loading && (
             <div className="self-start max-w-[80%] p-3 bg-gray-100 rounded-lg rounded-bl-none">
               <div className="flex items-center gap-2">
@@ -104,6 +127,7 @@ const Chatbot = () => {
           <div ref={messagesEndRef} />
         </div>
       </div>
+      
 
       {/* Input Container */}
       <form onSubmit={handleSubmit} className="flex gap-2 p-2 bg-white rounded-lg shadow-md">

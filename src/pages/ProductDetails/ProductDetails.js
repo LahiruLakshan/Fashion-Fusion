@@ -11,7 +11,7 @@ const ProductDetails = () => {
   const [productInfo, setProductInfo] = useState([]);
 
   useEffect(() => {
-    console.log("productInfo : ", productInfo);
+    console.log("productInfo : ", location.state.item);
     
     setProductInfo(location.state.item);
     setPrevLocation(location.pathname);

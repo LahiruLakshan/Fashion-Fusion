@@ -66,7 +66,7 @@ const RecommendSize = () => {
       console.log("Response:", response.data);
     } catch (error) {
       console.error("Upload Failed:", error);
-      alert("Upload failed. Please try again.");
+      alert(error.response.data.error);
     } finally {
       setUploading(false);
     }

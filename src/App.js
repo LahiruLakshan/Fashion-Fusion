@@ -26,6 +26,7 @@ import AddCloth from "./pages/AddCloth/AddCloth";
 import Chatbot from "./pages/Chatbot/Chatbot";
 import TryOn from "./pages/TryOn/TryOn";
 import RecommendSize from "./pages/RecommendSize/RecommendSize";
+import ProductDetailsSKU from "./pages/ProductDetails/ProductDetailsSKU";
 
 const Layout = () => {
   return (
@@ -57,6 +58,7 @@ const router = createBrowserRouter(
         {/* ==================== Header Navlink End here ===================== */}
         <Route path="/offer" element={<Offer />}></Route>
         <Route path="/product/:_id" element={<ProductDetails />}></Route>
+        <Route path="/chat-product" element={<ProductDetailsSKU />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
         <Route path="/paymentgateway" element={<Payment />}></Route>
       </Route>

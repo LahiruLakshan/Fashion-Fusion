@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { addToCart } from "../../../redux/orebiSlice";
 import { useNavigate } from "react-router-dom";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa"; // For star icons
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 const ProductInfo = ({ productInfo }) => {
   const navigate = useNavigate();
@@ -51,12 +52,23 @@ const ProductInfo = ({ productInfo }) => {
       {/* Product Name and Try On Button */}
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-4xl font-semibold">{productInfo?.productName}</h2>
+        <div className="flex flex-col gap-2 justify-between items-center">
+
         <button
           onClick={handleTryOn}
-          className="w-[100px] py-2 bg-primeColor hover:bg-black duration-300 text-white text-md font-titleFont rounded-md"
+          className="w-[120px] py-2 bg-primeColor hover:bg-black duration-300 text-white text-md font-titleFont rounded-md"
         >
           Try On
         </button>
+        <Link to="/recommended-size">
+        <button
+          onClick={handleTryOn}
+          className="w-[120px] p-2 bg-primeColor hover:bg-black duration-300 text-white text-sm font-titleFont rounded-md"
+          >
+          Get New Measurement
+        </button>
+          </Link>
+        </div>
       </div>
 
       {/* Price */}

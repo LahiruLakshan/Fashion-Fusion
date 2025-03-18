@@ -32,7 +32,7 @@ export const navBarList = [
   },
   {
     _id: 1004,
-    title: "Recommended Size",
+    title: "Get Measurement",
     link: "/recommended-size",
   },
   {
