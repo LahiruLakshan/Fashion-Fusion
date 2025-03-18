@@ -104,7 +104,7 @@ const TryOn = () => {
 
         console.log("response : ", response.data.recommended_size);
       } catch (err) {
-        setRecommendSize("L");
+        // setRecommendSize("");
       }
     };
     fetchAllItems();

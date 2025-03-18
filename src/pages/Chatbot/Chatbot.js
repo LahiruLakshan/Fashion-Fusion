@@ -54,6 +54,12 @@ const Chatbot = () => {
           content: response.data[0].text,
           role: 'assistant',
         };
+        if (botMessage?.content?.includes("I recommend:")) {
+          
+          const lastTwoChars = botMessage?.content.slice(-2);
+      }
+        console.log(botMessage.content);
+        
         setMessages((prev) => [...prev, botMessage]);
       }
     } catch (error) {
