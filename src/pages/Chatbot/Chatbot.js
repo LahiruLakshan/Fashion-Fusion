@@ -113,7 +113,7 @@ const Chatbot = () => {
               <p className="whitespace-pre-wrap">{message.content}</p>
             </div>
           ))}
-          {!sku && <button onClick={() => handleProductDetails(sku)} className="bg-primeColor text-white text-lg font-bodyFont w-[185px] h-[50px] hover:bg-black duration-300 font-bold rounded-md">
+          {sku && <button onClick={() => handleProductDetails(sku)} className="bg-primeColor text-white text-lg font-bodyFont w-[185px] h-[50px] hover:bg-black duration-300 font-bold rounded-md">
             Go To Product
           </button>}
           {loading && (
