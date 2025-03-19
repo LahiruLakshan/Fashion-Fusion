@@ -69,7 +69,7 @@ const Chatbot = () => {
         if (botMessage?.content?.includes("I recommend:")) {
           
           const lastTwoChars = botMessage?.content.slice(-2);
-          setSku(lastTwoChars);
+          setSku(lastTwoChars.replace(/\s+/g, ""));
           // handleProductDetails(lastTwoChars);
       }
         console.log(botMessage.content);
