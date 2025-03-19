@@ -14,13 +14,7 @@ const Chatbot = () => {
   const messagesEndRef = useRef(null);
 
   const handleProductDetails = (id) => {
-
-    
-    navigate(`/chat-product`, {
-      state: {
-        item: id,
-      },
-    });
+    window.open(`/chat-product?item=${id}`, "_blank");
   };
 
   // useEffect(() => {
