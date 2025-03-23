@@ -87,14 +87,24 @@ const FabricInfo = ({ productInfo }) => {
   // Handle form submission
   const handleSubmitReview = async () => {
     try {
-      // Concatenate all review fields into a single string
+      
+      if(reviewData.textureFeel === "" || reviewData.breathabilityComfort === "" || reviewData.durabilityStrength === "" || reviewData.stretchabilityFlexibility === "" || reviewData.careMaintenance === ""){
+        alert("Please check inputs before submitting");
+        return;
+      }
+      const payload = {
+        fabric_name: productInfo?.item?.fabric_name,
+        texture_feel: reviewData.textureFeel,
+        breathability_comfort: reviewData.breathabilityComfort,
+        durability_strength: reviewData.durabilityStrength,
+        stretchability_flexibility: reviewData.stretchabilityFlexibility,
+        care_maintenance: reviewData.careMaintenance,
+      }
+
       const reviewText = `${reviewData.textureFeel} ${reviewData.breathabilityComfort} ${reviewData.durabilityStrength} ${reviewData.stretchabilityFlexibility} ${reviewData.careMaintenance}`;
   
       // Submit review data to the backend
-      const response = await axios.post(`${BACKEND_URL}/api/add-fabric-review/`, {
-        fabric_name: productInfo?.item?.fabric_name,
-        review_text: reviewText, // Send the concatenated review text
-      });
+      const response = await axios.post(`${BACKEND_URL}/api/add-fabric-review/`, payload);
   
       console.log("Review submitted:", response.data);
       setIsReviewPopupOpen(false); // Close the popup

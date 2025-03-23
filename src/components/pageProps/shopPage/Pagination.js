@@ -11,9 +11,9 @@ function Items({ currentItems }) {
     <>
       {currentItems &&
         currentItems.map((item) => (
-          <div key={item._id} className="w-full">
+          <div key={item.id} className="w-full">
             <Product
-              _id={item._id}
+              _id={item.id}
               img={item.url}
               productName={item.title}
               price={item.sale_price_amount}
@@ -45,7 +45,7 @@ const Pagination = ({ itemsPerPage }) => {
   useEffect(() => {
     const fetchAllItems = async () => {
       await axios.get(`${BACKEND_URL}api/clothes-all`).then((response) =>{
-        console.log("response : ", response.data);
+        console.log("response Pagination : ", response.data);
         setCurrentItems(response.data)
       })
     }

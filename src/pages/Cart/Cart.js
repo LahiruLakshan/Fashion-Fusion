@@ -1,25 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import Breadcrumbs from "../../components/pageProps/Breadcrumbs";
 import { resetCart } from "../../redux/orebiSlice";
 import { emptyCart } from "../../assets/images/index";
 import ItemCard from "./ItemCard";
+import axios from "axios";
+import { BACKEND_URL } from "../../constants/config";
 
 const Cart = () => {
+  const date = new Date();
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
   const products = useSelector((state) => state.orebiReducer.products);
   const [totalAmt, setTotalAmt] = useState("");
   const [shippingCharge, setShippingCharge] = useState("");
+  const [purchaseList, setPurchaseList] = useState([]);
+
   useEffect(() => {
     let price = 0;
+    setPurchaseList([]);
     products.map((item) => {
+      setPurchaseList((data) => [
+        ...data,
+        {
+          user: JSON.parse(localStorage.getItem("authToken")).user_id,
+          cloth: item._id,
+          purchase_date: date.toISOString().split("T")[0],
+          quantity: item.quantity,
+        },
+      ]);
       price += item.price * item.quantity;
       return price;
     });
     setTotalAmt(price);
+    console.log("products : ", products);
   }, [products]);
+
+  const handleProceed = async () => {
+    await axios
+      .post(`${BACKEND_URL}api/purchase-multiple/`, purchaseList)
+      .then((response) => {
+        alert("purchasing successfully!");
+        dispatch(resetCart())
+        navigate(`/`);
+      });
+  };
+
   useEffect(() => {
     if (totalAmt <= 200) {
       setShippingCharge(30);
@@ -92,11 +121,14 @@ const Cart = () => {
                 </p>
               </div>
               <div className="flex justify-end">
-                <Link to="/paymentgateway">
-                  <button className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300">
-                    Proceed to Checkout
-                  </button>
-                </Link>
+                {/* <Link to="/paymentgateway"> */}
+                <button
+                  onClick={() => handleProceed()}
+                  className="w-52 h-10 bg-primeColor text-white hover:bg-black duration-300"
+                >
+                  Proceed to Checkout
+                </button>
+                {/* </Link> */}
               </div>
             </div>
           </div>

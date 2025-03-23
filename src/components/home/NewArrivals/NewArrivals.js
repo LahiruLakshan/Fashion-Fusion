@@ -72,7 +72,7 @@ const NewArrivals = () => {
           currentItems.map((item) =>{
             <div className="px-2">
            <Product
-              _id={item._id}
+              _id={item.id}
               img={item.url}
               productName={item.title}
               price={item.sale_price_amount}

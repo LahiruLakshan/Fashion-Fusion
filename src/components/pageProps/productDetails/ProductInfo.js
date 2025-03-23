@@ -12,8 +12,8 @@ const ProductInfo = ({ productInfo }) => {
   // Mock rating value (replace with actual rating from productInfo if available)
   const reviewsCount = 0; // Use productInfo.reviews_count if available
 
+  console.log(" productInfo?.item?.id : ",  productInfo?.item?.id);
   const handleTryOn = () => {
-    console.log(" productInfo?.item?.id : ",  productInfo?.item?.id);
     
     navigate(`/try-on`, {
       state: {
@@ -103,7 +103,7 @@ const ProductInfo = ({ productInfo }) => {
         onClick={() =>
           dispatch(
             addToCart({
-              _id: productInfo.id,
+              _id: productInfo?.item?.id,
               name: productInfo.productName,
               quantity: 1,
               image: productInfo.img,
