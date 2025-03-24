@@ -20,7 +20,7 @@ const FabricInfo = ({ productInfo }) => {
   });
 
   // Mock rating value (replace with actual rating from productInfo if available)
-  const reviewsCount = 0; // Use productInfo.reviews_count if available
+  const reviewsCount = productInfo?.item?.reviews_count || 0; // Use productInfo.reviews_count if available
 
   const handleTryOn = () => {
     navigate(`/try-on`, {
@@ -35,8 +35,8 @@ const FabricInfo = ({ productInfo }) => {
       await axios
         .get(`${BACKEND_URL}api/fabric-summary/${productInfo?.item?.fabric_name}/`)
         .then((response) => {
-          console.log("response : ", response.data);
-          setFabricReview(response.data.combined_review);
+          console.log("response fabric-summary: ", response.data);
+          setFabricReview(response.data.summary);
         })
         .catch((err) => setFabricReview(err.response.data.message));
     } catch (err) {
@@ -135,10 +135,7 @@ const FabricInfo = ({ productInfo }) => {
         <p className="text-md ">{productInfo?.item?.fabric_description}</p>
       </div>
 
-      <div className="flex flex-col">
-        <p className="text-sm text-gray-600">Fabric Review</p>
-        <p className="text-md ">{fabricReview}</p>
-      </div>
+     
 
 
       {/* Add a Review Button */}
@@ -148,7 +145,10 @@ const FabricInfo = ({ productInfo }) => {
       >
         Add a Review
       </button>
-
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Fabric Review</p>
+        <p className="text-md ">{fabricReview}</p>
+      </div>
       {/* Review Prompt */}
       {reviewsCount === 0 && (
         <p className="text-sm text-gray-600">Be the first to leave a review.</p>

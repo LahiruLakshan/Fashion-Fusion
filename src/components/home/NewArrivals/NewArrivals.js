@@ -27,11 +27,16 @@ const NewArrivals = () => {
       }
       fetchAllItems()
     },[])
+
+    useEffect(() => {
+      console.log("currentItems : ", currentItems);
+
+    },[currentItems])
   
 
 
   const settings = {
-    infinite: true,
+    infinite: currentItems.length > 4, // Only infinite if more than 4 items exist
     speed: 500,
     slidesToShow: 4,
     slidesToScroll: 1,
@@ -68,11 +73,11 @@ const NewArrivals = () => {
     <div className="w-full py-16">
       {style && <Heading heading="Trending Clothes" />}
       <Slider {...settings}>
-        {
-          currentItems.map((item) =>{
-            <div className="px-2">
-           <Product
-              _id={item.id}
+      {currentItems &&
+        currentItems?.map((item) => (
+          <div key={item.sku} className="w-full px-2">
+            <Product
+              _id={item.sku}
               img={item.url}
               productName={item.title}
               price={item.sale_price_amount}
@@ -82,9 +87,7 @@ const NewArrivals = () => {
               item={item}
             />
           </div>
-          })
-        }
-
+        ))}
       </Slider>
     </div>
   );
