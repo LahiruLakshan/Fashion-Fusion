@@ -147,7 +147,7 @@ const FabricInfo = ({ productInfo }) => {
       </button>
       <div className="flex flex-col">
         <p className="text-sm text-gray-600">Fabric Review</p>
-        <p className="text-md ">{fabricReview}</p>
+        <p className="text-md ">{fabricReview.toString()?.replace(/Not enough information for a detailed summary\./g, ' ').trim()}</p>
       </div>
       {/* Review Prompt */}
       {reviewsCount === 0 && (
