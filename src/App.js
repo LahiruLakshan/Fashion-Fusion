@@ -27,6 +27,7 @@ import Chatbot from "./pages/Chatbot/Chatbot";
 import TryOn from "./pages/TryOn/TryOn";
 import RecommendSize from "./pages/RecommendSize/RecommendSize";
 import ProductDetailsSKU from "./pages/ProductDetails/ProductDetailsSKU";
+import Profile from "./pages/Profile/Profile";
 
 const Layout = () => {
   return (
@@ -64,6 +65,7 @@ const router = createBrowserRouter(
       </Route>
       <Route path="/signup" element={<SignUp />}></Route>
       <Route path="/signin" element={<SignIn />}></Route>
+      <Route path="/profile" element={<Profile />}></Route>
     </Route>
   )
 );

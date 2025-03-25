@@ -13,15 +13,19 @@ const HeaderBottom = () => {
   const [showUser, setShowUser] = useState(false);
   const navigate = useNavigate();
   const ref = useRef();
-  // useEffect(() => {
-  //   document.body.addEventListener("click", (e) => {
-  //     if (ref.current.contains(e.target)) {
-  //       setShow(true);
-  //     } else {
-  //       setShow(false);
-  //     }
-  //   });
-  // }, [show, ref]);
+  useEffect(() => {
+    // document.body.addEventListener("click", (e) => {
+    //   if (ref.current.contains(e.target)) {
+    //     setShow(true);
+    //   } else {
+    //     setShow(false);
+    //   }
+    // });
+    console.log(
+      "local storage auth token : ",
+      JSON.parse(localStorage.getItem("authToken"))
+    );
+  }, [show, ref]);
 
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -29,6 +33,10 @@ const HeaderBottom = () => {
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
+  };
+  const handleLogout = (e) => {
+    localStorage.removeItem("authToken");
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -152,12 +160,21 @@ const HeaderBottom = () => {
                     Sign Up
                   </li>
                 </Link>
-                <li className="text-gray-400 px-4 py-1 border-b-[1px] border-b-gray-400 hover:border-b-white hover:text-white duration-300 cursor-pointer">
-                  Profile
-                </li>
-                <li className="text-gray-400 px-4 py-1 border-b-[1px] border-b-gray-400  hover:border-b-white hover:text-white duration-300 cursor-pointer">
-                  Others
-                </li>
+                {localStorage.getItem("authToken") && (
+                  <Link onClick={() => setShowUser(false)} to="/profile">
+                    <li className="text-gray-400 px-4 py-1 border-b-[1px] border-b-gray-400 hover:border-b-white hover:text-white duration-300 cursor-pointer">
+                      Profile
+                    </li>
+                  </Link>
+                )}
+                {localStorage.getItem("authToken") && (
+                  <li
+                    onClick={() => handleLogout()}
+                    className="text-gray-400 px-4 py-1 border-b-[1px] border-b-gray-400  hover:border-b-white hover:text-white duration-300 cursor-pointer"
+                  >
+                    Log Out
+                  </li>
+                )}
               </motion.ul>
             )}
             <Link to="/cart">

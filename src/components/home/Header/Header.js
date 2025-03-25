@@ -11,6 +11,7 @@ import Flex from "../../designLayouts/Flex";
 const Header = () => {
   const authToken = JSON.parse(localStorage.getItem("authToken")); // Assuming authToken is stored in localStorage
 const userRole = authToken?.role || "user"; // Default role is 'user'
+console.log("authToken : ", authToken);
 
 const filteredNavBarList = navBarList.filter(
   (item) => !item.adminOnly || userRole === "admin"
