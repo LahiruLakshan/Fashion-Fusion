@@ -5,12 +5,17 @@ import { useNavigate } from "react-router-dom";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa"; // For star icons
 import axios from "axios";
 import { BACKEND_URL } from "../../../constants/config";
+import StarRatingInput from "./StarRatingInput";
+import FabricRating from "./FabricRating";
 
 const FabricInfo = ({ productInfo }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [userRating, setUserRating] = useState(0);
+
   const [fabricReview, setFabricReview] = useState("");
   const [isReviewPopupOpen, setIsReviewPopupOpen] = useState(false);
+  const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
   const [reviewData, setReviewData] = useState({
     textureFeel: "",
     breathabilityComfort: "",
@@ -120,6 +125,14 @@ const FabricInfo = ({ productInfo }) => {
     }
   };
 
+  const handleSubmitRating = async () =>{
+    if(userRating === 0) return alert("Please select a rating");
+     const payload = {
+            fabric_name: productInfo?.item?.fabric_name,
+            rating: userRating
+          }
+        const response = await axios.post(`${BACKEND_URL}/api/add-fabric-rating/`, payload);
+  }
   return (
     <div className="flex flex-col gap-4">
       {/* Product Name and Try On Button */}
@@ -135,16 +148,29 @@ const FabricInfo = ({ productInfo }) => {
         <p className="text-md ">{productInfo?.item?.fabric_description}</p>
       </div>
 
-     
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Average Rating</p>
+        <FabricRating rating={productInfo?.item?.average_rating || 0} reviewsCount={productInfo?.item?.reviews_count} />
+
+      </div>
 
 
       {/* Add a Review Button */}
+      <div className="gap-3 flex flex-row"> 
+
       <button
         onClick={() => setIsReviewPopupOpen(true)}
         className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
-      >
+        >
         Add a Review
       </button>
+      <button
+        onClick={() => setIsRatingPopupOpen(true)}
+        className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
+        >
+        Add a Rating
+      </button>
+        </div>
       <div className="flex flex-col">
         <p className="text-sm text-gray-600">Fabric Review</p>
         <p className="text-md ">{fabricReview.toString()?.replace(/Not enough information for a detailed summary\./g, ' ').trim()}</p>
@@ -245,6 +271,36 @@ const FabricInfo = ({ productInfo }) => {
               </button>
               <button
                 onClick={() => setIsReviewPopupOpen(false)}
+                className="flex-1 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+       {/* Rating Popup */}
+       {isRatingPopupOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Add a Fabric Rating</h2>
+            <div className="flex flex-row justify-center w-full mb-5">
+
+            <StarRatingInput fabricName={productInfo?.item?.fabric_name} rating={userRating} onChange={setUserRating} />
+            </div>
+
+
+            {/* Buttons */}
+            <div className="flex gap-2">
+              <button
+                onClick={handleSubmitRating}
+                className="flex-1 py-2 bg-primeColor text-white rounded-lg hover:bg-black"
+              >
+                Submit
+              </button>
+              <button
+                onClick={() => setIsRatingPopupOpen(false)}
                 className="flex-1 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
               >
                 Cancel
