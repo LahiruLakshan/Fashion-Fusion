@@ -38,7 +38,7 @@ const SignIn = () => {
     }
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/auth/login/`, {
+      const response = await axios.post(`${BACKEND_URL}api/auth/login/`, {
         email,
         password,
       });

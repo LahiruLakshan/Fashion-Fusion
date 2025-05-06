@@ -11,8 +11,14 @@ import FabricRating from "./FabricRating";
 const FabricInfo = ({ productInfo }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [userRating, setUserRating] = useState(0);
-
+  // const [userRating, setUserRating] = useState(0);
+  const [ratingData, setRatingData] = useState({
+    textureFeel: 0,
+    breathabilityComfort: 0,
+    durabilityStrength: 0,
+    stretchabilityFlexibility: 0,
+    careMaintenance: 0,
+  });
   const [fabricReview, setFabricReview] = useState("");
   const [isReviewPopupOpen, setIsReviewPopupOpen] = useState(false);
   const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
@@ -38,7 +44,9 @@ const FabricInfo = ({ productInfo }) => {
   const fetchAllItems = async () => {
     try {
       await axios
-        .get(`${BACKEND_URL}api/fabric-summary/${productInfo?.item?.fabric_name}/`)
+        .get(
+          `${BACKEND_URL}api/fabric-summary/${productInfo?.item?.fabric_name}/`
+        )
         .then((response) => {
           console.log("response fabric-summary: ", response.data);
           setFabricReview(response.data.summary);
@@ -89,11 +97,26 @@ const FabricInfo = ({ productInfo }) => {
     }));
   };
 
+  const handleRateChange = (value, name) => {
+    // console.log("e : ", e);
+    
+    // const { name, value } = e.target;
+    setRatingData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
   // Handle form submission
   const handleSubmitReview = async () => {
     try {
-      
-      if(reviewData.textureFeel === "" || reviewData.breathabilityComfort === "" || reviewData.durabilityStrength === "" || reviewData.stretchabilityFlexibility === "" || reviewData.careMaintenance === ""){
+      if (
+        reviewData.textureFeel === "" ||
+        reviewData.breathabilityComfort === "" ||
+        reviewData.durabilityStrength === "" ||
+        reviewData.stretchabilityFlexibility === "" ||
+        reviewData.careMaintenance === ""
+      ) {
         alert("Please check inputs before submitting");
         return;
       }
@@ -104,13 +127,16 @@ const FabricInfo = ({ productInfo }) => {
         durability_strength: reviewData.durabilityStrength,
         stretchability_flexibility: reviewData.stretchabilityFlexibility,
         care_maintenance: reviewData.careMaintenance,
-      }
+      };
 
       const reviewText = `${reviewData.textureFeel} ${reviewData.breathabilityComfort} ${reviewData.durabilityStrength} ${reviewData.stretchabilityFlexibility} ${reviewData.careMaintenance}`;
-  
+
       // Submit review data to the backend
-      const response = await axios.post(`${BACKEND_URL}/api/add-fabric-review/`, payload);
-  
+      const response = await axios.post(
+        `${BACKEND_URL}api/add-fabric-review/`,
+        payload
+      );
+
       console.log("Review submitted:", response.data);
       setIsReviewPopupOpen(false); // Close the popup
       setReviewData({
@@ -125,14 +151,23 @@ const FabricInfo = ({ productInfo }) => {
     }
   };
 
-  const handleSubmitRating = async () =>{
-    if(userRating === 0) return alert("Please select a rating");
-     const payload = {
-            fabric_name: productInfo?.item?.fabric_name,
-            rating: userRating
-          }
-        const response = await axios.post(`${BACKEND_URL}/api/add-fabric-rating/`, payload);
-  }
+  const handleSubmitRating = async () => {
+    // if (ratingData.textureFeel === 0) return alert("Please select a rating");
+    const payload = {
+      fabric_name: productInfo?.item?.fabric_name,
+      texture_feel: ratingData.textureFeel,
+        breathability_comfort: ratingData.breathabilityComfort,
+        durability_strength: ratingData.durabilityStrength,
+        stretchability_flexibility: ratingData.stretchabilityFlexibility,
+        care_maintenance: ratingData.careMaintenance,
+    };
+    console.log("payload : ", payload);
+    
+    const response = await axios.post(
+      `${BACKEND_URL}api/add-fabric-rating/`,
+      payload
+    );
+  };
   return (
     <div className="flex flex-col gap-4">
       {/* Product Name and Try On Button */}
@@ -150,30 +185,35 @@ const FabricInfo = ({ productInfo }) => {
 
       <div className="flex flex-col">
         <p className="text-sm text-gray-600">Average Rating</p>
-        <FabricRating rating={productInfo?.item?.average_rating || 0} reviewsCount={productInfo?.item?.reviews_count} />
-
+        <FabricRating
+          rating={productInfo?.item?.average_rating || 0}
+          reviewsCount={productInfo?.item?.reviews_count}
+        />
       </div>
 
-
       {/* Add a Review Button */}
-      <div className="gap-3 flex flex-row"> 
-
-      <button
-        onClick={() => setIsReviewPopupOpen(true)}
-        className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
+      <div className="gap-3 flex flex-row">
+        <button
+          onClick={() => setIsReviewPopupOpen(true)}
+          className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
         >
-        Add a Review
-      </button>
-      <button
-        onClick={() => setIsRatingPopupOpen(true)}
-        className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
+          Add a Review
+        </button>
+        <button
+          onClick={() => setIsRatingPopupOpen(true)}
+          className="w-full py-4 bg-primeColor hover:bg-black duration-300 text-white text-lg font-titleFont rounded-md"
         >
-        Add a Rating
-      </button>
-        </div>
+          Add a Rating
+        </button>
+      </div>
       <div className="flex flex-col">
         <p className="text-sm text-gray-600">Fabric Review</p>
-        <p className="text-md ">{fabricReview.toString()?.replace(/Not enough information for a detailed summary\./g, ' ').trim()}</p>
+        <p className="text-md ">
+          {fabricReview
+            .toString()
+            ?.replace(/Not enough information for a detailed summary\./g, " ")
+            .trim()}
+        </p>
       </div>
       {/* Review Prompt */}
       {reviewsCount === 0 && (
@@ -280,16 +320,57 @@ const FabricInfo = ({ productInfo }) => {
         </div>
       )}
 
-       {/* Rating Popup */}
-       {isRatingPopupOpen && (
+      {/* Rating Popup */}
+      {isRatingPopupOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-md">
             <h2 className="text-xl font-bold mb-4">Add a Fabric Rating</h2>
+            <p className="text-sm text-gray-600">Texture & Feel</p>
             <div className="flex flex-row justify-center w-full mb-5">
-
-            <StarRatingInput fabricName={productInfo?.item?.fabric_name} rating={userRating} onChange={setUserRating} />
+              <StarRatingInput
+                fabricName={productInfo?.item?.fabric_name}
+                rating={ratingData.textureFeel}
+                onChange={e => handleRateChange(e, "textureFeel")}
+              />
             </div>
 
+            <p className="text-sm text-gray-600">Breathability & Comfort</p>
+            <div className="flex flex-row justify-center w-full mb-5">
+              <StarRatingInput
+                fabricName={productInfo?.item?.fabric_name}
+                rating={ratingData.breathabilityComfort}
+                onChange={e => handleRateChange(e, "breathabilityComfort")}
+              />
+            </div>
+
+            <p className="text-sm text-gray-600">Durability & Strength</p>
+            <div className="flex flex-row justify-center w-full mb-5">
+              <StarRatingInput
+                fabricName={productInfo?.item?.fabric_name}
+                rating={ratingData.durabilityStrength}
+                onChange={e => handleRateChange(e, "durabilityStrength")}
+              />
+            </div>
+
+            <p className="text-sm text-gray-600">
+              Stretchability & Flexibility
+            </p>
+            <div className="flex flex-row justify-center w-full mb-5">
+              <StarRatingInput
+                fabricName={productInfo?.item?.fabric_name}
+                rating={ratingData.stretchabilityFlexibility}
+                onChange={e => handleRateChange(e, "stretchabilityFlexibility")}
+              />
+            </div>
+
+            <p className="text-sm text-gray-600">Care & Maintenance</p>
+            <div className="flex flex-row justify-center w-full mb-5">
+              <StarRatingInput
+                fabricName={productInfo?.item?.fabric_name}
+                rating={ratingData.careMaintenance}
+                onChange={e => handleRateChange(e, "careMaintenance")}
+              />
+            </div>
 
             {/* Buttons */}
             <div className="flex gap-2">

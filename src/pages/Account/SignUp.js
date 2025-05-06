@@ -21,7 +21,7 @@ const SignUp = () => {
     }
 
     try {
-      const response = await axios.post(`${BACKEND_URL}/api/auth/signup/`, {
+      const response = await axios.post(`${BACKEND_URL}api/auth/signup/`, {
         username,
         email,
         password,
