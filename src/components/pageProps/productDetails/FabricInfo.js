@@ -178,6 +178,14 @@ const FabricInfo = ({ productInfo }) => {
       `${BACKEND_URL}api/add-fabric-rating/`,
       payload
     );
+    setIsRatingPopupOpen(false)
+    setRatingData({
+      textureFeel: 0,
+      breathabilityComfort: 0,
+      durabilityStrength: 0,
+      stretchabilityFlexibility: 0,
+      careMaintenance: 0,
+    })
   };
   return (
     <div className="flex flex-col gap-4">
