@@ -19,6 +19,7 @@ const FabricInfo = ({ productInfo }) => {
     stretchabilityFlexibility: 0,
     careMaintenance: 0,
   });
+  const [fabricRate, setFabricRate] = useState("");
   const [fabricReview, setFabricReview] = useState("");
   const [isReviewPopupOpen, setIsReviewPopupOpen] = useState(false);
   const [isRatingPopupOpen, setIsRatingPopupOpen] = useState(false);
@@ -52,6 +53,16 @@ const FabricInfo = ({ productInfo }) => {
           setFabricReview(response.data.summary);
         })
         .catch((err) => setFabricReview(err.response.data.message));
+
+        await axios
+        .get(
+          `${BACKEND_URL}api/average-fabric-rating/${productInfo?.item?.fabric_name}/`
+        )
+        .then((response) => {
+          console.log("response fabric-summary: ", response.data);
+          setFabricRate(response.data.average_ratings);
+        })
+        .catch((err) => setFabricRate(err.response.data.message));
     } catch (err) {
       console.log(err);
     }
@@ -184,10 +195,37 @@ const FabricInfo = ({ productInfo }) => {
       </div>
 
       <div className="flex flex-col">
-        <p className="text-sm text-gray-600">Average Rating</p>
+        <p className="text-sm text-gray-600">Texture & Feel</p>
         <FabricRating
-          rating={productInfo?.item?.average_rating || 0}
-          reviewsCount={productInfo?.item?.reviews_count}
+          rating={fabricRate.texture_feel || 0}
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Breathability & Comfort</p>
+        <FabricRating
+          rating={fabricRate.breathability_comfort || 0}
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Durability & Strength</p>
+        <FabricRating
+          rating={fabricRate.durability_strength || 0}
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Stretchability & Flexibility</p>
+        <FabricRating
+          rating={fabricRate.stretchability_flexibility || 0}
+        />
+      </div>
+
+      <div className="flex flex-col">
+        <p className="text-sm text-gray-600">Care & Maintenance</p>
+        <FabricRating
+          rating={fabricRate.care_maintenance || 0}
         />
       </div>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { FaStar, FaStarHalfAlt, FaRegStar } from "react-icons/fa";
 
-const FabricRating = ({ rating = 0, reviewsCount = 0 }) => {
+const FabricRating = ({ rating = 0}) => {
   const renderStars = () => {
     const stars = [];
     const fullStars = Math.floor(rating);
@@ -25,7 +25,7 @@ const FabricRating = ({ rating = 0, reviewsCount = 0 }) => {
   return (
     <div className="flex items-center gap-2">
       <div className="flex gap-1">{renderStars()}</div>
-      <span className="text-sm text-gray-600">({rating} out of 5, {reviewsCount} reviews)</span>
+      {/* <span className="text-sm text-gray-600">({rating} out of 5, {reviewsCount} reviews)</span> */}
     </div>
   );
 };
